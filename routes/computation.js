@@ -1,18 +1,24 @@
 var express = require('express');
 var router = express.Router();
-
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-    let x = Math.random()*100;
-    x= x.toFixed(3)
-    if(req.query.x !=undefined){
-        x = parseFloat(req.query.x)
+router.get('/', function (req, res, next) {
+    fake_url = "https://fake.com/path" + req.url
+    const url = new URL(fake_url)
+    const search_params = url.searchParams
+    if (req.method === 'GET') {
+        value = search_params.get("x")
+        if(value === null)
+        {
+            value=Math.round(Math.random()*999);
+        }     
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        
+        res.write('<br>Math.imul() applied to ' + value + ' is ' + Math.imul(value))
+        res.write('<br>Math.log() applied to ' + value + ' is ' + Math.log(value))
+        res.write('<br>Math.log10() applied to ' + value + ' is ' + Math.log10(value))
+        res.end()
     }
-    let num1=Math.imul(x);
-    let num2=Math.log(x);
-    let num3=Math.log10(x);
 
-  res.send('computation', {x:x,imul:num1,log:num2,log10:num3});
 });
 
 module.exports = router;
